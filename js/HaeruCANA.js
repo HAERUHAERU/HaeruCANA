@@ -15,7 +15,7 @@ function reset(flag) {
 			if (lastData != null)
 				$('#target').text('[--:--] 해루카나 (카드분석기)')
 			$('#member').html('')
-			autoResetFlag = false
+			autoResetFlag = true
 			startFlag = true
 			break
 		case "autoReset":
