@@ -62,7 +62,7 @@ function BeforeLogLineRead(e) {
 			break
 		case "CombatData":
 			lastData = lastLog.msg  //최신 전투 정보 저장
-			if (lastLog.from != null || lastLog.from == undefined) {
+			if ((lastLog.from != null || lastLog.from == undefined) && lastData.isActive == true) {
 				//타겟 정보 출력
 				$('#notice').remove()
 				if (!$('#notice').length)
