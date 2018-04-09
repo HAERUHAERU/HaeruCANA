@@ -10,21 +10,18 @@ function reset(flag) {
             autoResetFlag = true
             break
         case "btn":
-            webs.overlayAPI("RequestEnd");
-            setTimeout(function () {
                 $("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
                 $('.scrollArea').html('<div id="notice">초기화 완료!<br>초읽기 혹은 전투를 시작하세요!</div>');
                 if (lastData != null)
                     $('#target').text('[--:--] 해루카나 (카드분석기)')
                 $('#member').html('')
-            }, 1500);
             autoResetFlag = false
             startFlag = true
             break
         case "autoReset":
             $("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
             $('#member').html('')
-            $('.scrollArea').html('<div id="notice">초읽기 중입니다...<br>카드 로그를 인식합니다...</div>');
+            $('.scrollArea').html('<div id="notice">초읽기 혹은 전투 시작을 인식했습니다.</div>');
             $('#target').text('[--:--] 해루카나 (카드분석기)')
             autoResetFlag = false
             startFlag = true
