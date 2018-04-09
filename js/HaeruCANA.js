@@ -61,7 +61,7 @@ function BeforeLogLineRead(e) {
 		case "CombatData":
 			lastData = lastLog.msg  //최신 전투 정보 저장
 			//타겟 정보 출력
-			if (lastData.isActive == true) {
+			if (lastData.isActive) {
 				//타임라인 초기화
 				$('#notice').remove()
 				if (!$('#notice').length)
@@ -98,8 +98,10 @@ function BeforeLogLineRead(e) {
 				}
 				else if (lastLog.msg.split("|")[4].match(cancelLog))
 					reset('btn')
-				else if (lastLog.msg.split("|")[4].match(startLog3))
-				$('#target').text('[--:--] 전투 시작!')
+				else if (lastLog.msg.split("|")[4].match(startLog3)){
+					if(!lastData.isActive)
+						$('#target').text('[--:--] 전투 시작!')
+				}
 			}
 
 			//사전 왕도 처리
@@ -273,18 +275,13 @@ function createTimeline(from, to, actionCode, actionName) {
 	var arrow = '→'
 	var eff = ''
 
-	if (lastData != null)
+	if (lastData.isActive)
 		var duration = lastData.Encounter.duration;
 	else
 		var duration = "--:--"
 
 	switch (actionCode) {
 		case "0A": case "0F":
-			if (lastData != null)
-				var duration = lastData.Encounter.duration;
-			else
-				var duration = "--:--"
-
 			//천궁의 반목 
 			if (actionCode == "0A") {
 				to = ''
