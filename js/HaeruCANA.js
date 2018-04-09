@@ -4,10 +4,10 @@
 
 function reset(flag) {
 	startFlag = false
+	autoResetFlag = true
 	switch (flag) {
 		case "endEncounter":
 			AstData = new Object()
-			autoResetFlag = true
 			break
 		case "btn":
 			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
@@ -15,14 +15,12 @@ function reset(flag) {
 			if (lastData != null)
 				$('#target').text('[--:--] 해루카나 (카드분석기)')
 			$('#member').html('')
-			autoResetFlag = true
 			break
 		case "autoReset":
 			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
 			$('.scrollArea').html('<div id="notice">초읽기 혹은 전투 시작을 인식했습니다.</div>');
 			$('#target').text('[--:--] 해루카나 (카드분석기)')
 			$('#member').html('')
-			autoResetFlag = false
 			break
 	}
 }
@@ -90,9 +88,11 @@ function BeforeLogLineRead(e) {
 
 			//초읽기 처리 구문
 			if (lastLog.msg.split("|")[0] == '00') {
-				if (lastLog.msg.split("|")[4].match(startLog1) || lastLog.msg.split("|")[4].match(startLog2)) {
-					if (autoResetFlag == true)
+				if (lastLog.msg.split("|")[4].match(startLog1) || lastLog.msg.split("|")[4].match(startLog2)) {					
+					if (autoResetFlag == true){
 						reset('autoReset')
+						autoResetFlag = false
+					}
 				}
 				else if (lastLog.msg.split("|")[4].match(cancelLog))
 					reset('btn')
