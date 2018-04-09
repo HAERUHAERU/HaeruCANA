@@ -11,15 +11,17 @@ function reset(flag) {
 			break
 		case "btn":
 			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
-			$('.scrollArea').html('');
-			if (lastData != null)
+			$('.scrollArea').html('');			
+			if(!lastData.isActive && !$('#notice').length)
 				$('#target').text('[--:--] 초기화 완료!')
 			$('#member').html('')
 			startFlag = true
+			initFlag = true 
 			break
 		case "autoReset":
 			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
 			$('.scrollArea').html('');
+			if(!lastData.isActive && !$('#notice').length)
 			$('#target').text('[--:--] 초읽기·전투 시작을 인식!')
 			$('#member').html('')
 			startFlag = true
@@ -95,12 +97,14 @@ function BeforeLogLineRead(e) {
 						reset('autoReset')
 						autoResetFlag = false
 					}
+					initFlag = false
 				}
 				else if (lastLog.msg.split("|")[4].match(cancelLog))
 					reset('btn')
 				else if (lastLog.msg.split("|")[4].match(startLog3)){
-					if(!lastData.isActive)
+					if(!lastData.isActive && !$('#notice').length && !initFlag){
 						$('#target').text('[--:--] 전투 시작!')
+					}
 				}
 			}
 
@@ -388,3 +392,4 @@ var lastData = null
 
 var startFlag = false
 var autoResetFlag = true
+var initFlag = false
