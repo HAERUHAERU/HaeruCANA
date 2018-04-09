@@ -3,24 +3,26 @@
 //----------------------------------------------------------------------------------------
 
 function reset(flag) {
-	startFlag = false
 	autoResetFlag = true
 	switch (flag) {
 		case "endEncounter":
 			AstData = new Object()
+			startFlag = false
 			break
 		case "btn":
 			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
-			$('.scrollArea').html('<div id="notice">초기화 완료!<br>초읽기 혹은 전투를 시작하세요!</div>');
+			$('.scrollArea').html('');
 			if (lastData != null)
-				$('#target').text('[--:--] 해루카나 (카드분석기)')
+				$('#target').text('[--:--] 초기화 완료!')
 			$('#member').html('')
+			startFlag = true
 			break
 		case "autoReset":
 			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
-			$('.scrollArea').html('<div id="notice">초읽기 혹은 전투 시작을 인식했습니다.</div>');
-			$('#target').text('[--:--] 해루카나 (카드분석기)')
+			$('.scrollArea').html('');
+			$('#target').text('[--:--] 초읽기·전투 시작을 인식!')
 			$('#member').html('')
+			startFlag = true
 			break
 	}
 }
@@ -97,7 +99,7 @@ function BeforeLogLineRead(e) {
 				else if (lastLog.msg.split("|")[4].match(cancelLog))
 					reset('btn')
 				else if (lastLog.msg.split("|")[4].match(startLog3))
-					$('.scrollArea').html('<div id="notice">전투를 시작하세요!</div>')
+				$('#target').text('[--:--] 전투 시작!')
 			}
 
 			//사전 왕도 처리
@@ -298,6 +300,7 @@ function createTimeline(from, to, actionCode, actionName) {
 				+ '<td class="cell_3 to">' + to + '</td>'
 				+ '</tr></table><div class="underline"></div>';
 
+			$('#notice').remove()
 			$('.scrollArea').prepend(html);
 			break
 		case "33D": case "33E": case "33F": case "340": case "341": case "342":
@@ -322,6 +325,7 @@ function createTimeline(from, to, actionCode, actionName) {
 				+ '<td class="cell_3 to">' + AstData[name].to + '</td>'
 				+ '</tr></table><div class="underline"></div>';
 
+			$('#notice').remove()
 			$('.scrollArea').prepend(html);
 
 			AstData[name].loyalRoad = "단일"
