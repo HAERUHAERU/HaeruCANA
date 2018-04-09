@@ -61,8 +61,8 @@ function BeforeLogLineRead(e) {
                 myJob = 'AST';
             break
         case "CombatData":
-            lastData = lastLog.msg  //최신 전투 정보 저장
-            if (lastLog.from != null || lastLog.from == undefined) {
+			lastData = lastLog.msg  //최신 전투 정보 저장
+            if (lastLog.from != null && lastLog.from == undefined) {
                 //타겟 정보 출력
                 $('#notice').remove()
                 if (!$('#notice').length)
@@ -177,7 +177,7 @@ function getLog(from, to, actionCode, actionName) {
         //점지: 할로네의 창(394), 점지: 살리아크의 물병(395), 점지: 비레고의 탑(396), 왕의 검(1D14), 여왕의 날개(1D15) 
         case "391": case "392": case "393": case "394": case "395": case "396": case "1D14": case "1D15":
             AstData[name].cardCount[actionCode]++;
-            $('#member').find('span').removeClass('on')
+			$('#member').find('span').removeClass('on')
             if (myJob == "AST") {
                 $('#' + actionCode).find('.num').text(AstData[myName].cardCount[actionCode])
                 $('#' + myName).addClass('on')
