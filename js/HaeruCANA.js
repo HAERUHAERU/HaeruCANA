@@ -383,4 +383,4 @@ var AstData = new Object()
 var lastData = null
 
 var startFlag = false
-var autoResetFlag = false
+var autoResetFlag = true
