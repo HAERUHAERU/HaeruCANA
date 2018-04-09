@@ -3,10 +3,10 @@
 //----------------------------------------------------------------------------------------
 
 function reset(flag) {
+	startFlag = false
 	switch (flag) {
 		case "endEncounter":
 			AstData = new Object()
-			startFlag = false
 			autoResetFlag = true
 			break
 		case "btn":
@@ -16,15 +16,13 @@ function reset(flag) {
 				$('#target').text('[--:--] 해루카나 (카드분석기)')
 			$('#member').html('')
 			autoResetFlag = true
-			startFlag = true
 			break
 		case "autoReset":
 			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
-			$('#member').html('')
 			$('.scrollArea').html('<div id="notice">초읽기 혹은 전투 시작을 인식했습니다.</div>');
 			$('#target').text('[--:--] 해루카나 (카드분석기)')
+			$('#member').html('')
 			autoResetFlag = false
-			startFlag = true
 			break
 	}
 }
@@ -62,11 +60,12 @@ function BeforeLogLineRead(e) {
 			break
 		case "CombatData":
 			lastData = lastLog.msg  //최신 전투 정보 저장
-			if ((lastLog.from != null || lastLog.from == undefined) && lastData.isActive == true) {
-				//타겟 정보 출력
+			//타겟 정보 출력
+			if (lastData.isActive == true) {
+				//타임라인 초기화
 				$('#notice').remove()
 				if (!$('#notice').length)
-					$('#target').text('[' + lastData.Encounter.duration + '] ' + lastData.Encounter.title)
+				$('#target').text('[' + lastData.Encounter.duration + '] ' + lastData.Encounter.title)
 				//전투 집계 끝났을 때 
 				if (lastData.Encounter.title != "Encounter")
 					reset('endEncounter')
@@ -77,6 +76,10 @@ function BeforeLogLineRead(e) {
 						startFlag = true
 					}
 				}
+			}else {
+				if (!$('#notice').length)
+				$('#target').text('[' + lastData.Encounter.duration + '] ' + lastData.Encounter.title)
+				startFlag = false
 			}
 			break
 		case "Chat":
