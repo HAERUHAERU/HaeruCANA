@@ -66,5 +66,5 @@ function connectWebSocket(uri) {
     };
 }
 
-connectWebSocket(/*editHost(*/wsUri1/*)*/)	//로그
-connectWebSocket(/*editHost(*/wsUri2/*)*/)	//전투 데이터
+connectWebSocket(editHost(wsUri1))	//로그
+connectWebSocket(editHost(wsUri2))	//전투 데이터
