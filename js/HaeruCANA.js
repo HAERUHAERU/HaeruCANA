@@ -3,10 +3,10 @@
 //----------------------------------------------------------------------------------------
 
 function reset(flag) {
+	AstData = new Object()
 	autoResetFlag = true
 	switch (flag) {
 		case "endEncounter":
-			AstData = new Object()
 			startFlag = false
 			break
 		case "btn":
@@ -67,12 +67,9 @@ function BeforeLogLineRead(e) {
 				//타임라인 초기화
 				$('#notice').remove()
 				if (!$('#notice').length)
-				$('#target').text('[' + lastData.Encounter.duration + '] ' + lastData.Encounter.title)
+				$('#target').text('[' + lastData.Encounter.duration + '] ' + lastData.Encounter.title)	
 				//전투 집계 끝났을 때 
-				if (lastData.Encounter.title != "Encounter")
-					reset('endEncounter')
-				//집계 중 
-				else {
+				if (lastData.Encounter.title == "Encounter"){				
 					if (startFlag == false) {
 						reset('autoReset')
 						startFlag = true
@@ -81,7 +78,8 @@ function BeforeLogLineRead(e) {
 			}else {
 				if (!$('#notice').length)
 				$('#target').text('[' + lastData.Encounter.duration + '] ' + lastData.Encounter.title)
-				startFlag = false
+				startFlag = false	
+				reset('endEncounter')		
 			}
 			break
 		case "Chat":
@@ -93,7 +91,7 @@ function BeforeLogLineRead(e) {
 			//초읽기 처리 구문
 			if (lastLog.msg.split("|")[0] == '00') {
 				if (lastLog.msg.split("|")[4].match(startLog1) || lastLog.msg.split("|")[4].match(startLog2)) {					
-					if (autoResetFlag == true){
+					if (autoResetFlag && !lastData.isActive){
 						reset('autoReset')
 						autoResetFlag = false
 					}
@@ -311,7 +309,7 @@ function createTimeline(from, to, actionCode, actionName) {
 				eff = 'eff3'
 			else if (AstData[name].loyalRoad == "광역") {
 				arrow = ''
-				to = ''
+				AstData[name].to = ''
 				eff = 'eff4'
 			}
 			else
