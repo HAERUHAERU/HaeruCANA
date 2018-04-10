@@ -15,7 +15,7 @@ function reset(flag) {
 			if(!lastData.isActive && !$('#notice').length)
 				$('#target').text('[--:--] 초기화 완료!')
 			$('#member').html('')
-			startFlag = true
+			startFlag = false
 			initFlag = true 
 			break
 		case "autoReset":
@@ -87,7 +87,7 @@ function BeforeLogLineRead(e) {
 			var startLog2 = /^(전투 시작 \d초 전\! \((.*?)\))$/im
 			var startLog3 = /^(전투 시작\!)$/im
 			var cancelLog = /^((.*?) 님이 초읽기를 취소했습니다.)/im
-
+			
 			//초읽기 처리 구문
 			if (lastLog.msg.split("|")[0] == '00') {
 				if (lastLog.msg.split("|")[4].match(startLog1) || lastLog.msg.split("|")[4].match(startLog2)) {					
