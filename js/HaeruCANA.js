@@ -105,20 +105,23 @@ function BeforeLogLineRead(e) {
 					}
 				}
 			}
-
 			//사전 왕도 처리
-			if (lastLog.msg.split("|")[0] == '26' || lastLog.msg.split("|")[0] == '30') {
-				var from = lastLog.msg.split("|")[6]						
+			//파기 관련 
+			if (lastLog.msg.split("|")[0] == '30' || lastLog.msg.split("|")[0] == '26') {
+				var from = lastLog.msg.split("|")[6]
 				var name = from.replace(/ /g, "").replace(/'/g, "_")
 				var actionName = lastLog.msg.split("|")[3]
-				if (actionName == "왕도: 효과 향상" || actionName == "왕도: 범위화" || actionName == "왕도: 지속시간 증가"){
-					if(lastLog.msg.split("|")[0] == '26')
-						getLog(from, '', getActionCode(actionName), actionName)
-					else
-						AstData[name].loyalRoad = "단일"
+
+				if ((actionName == "왕도: 효과 향상" || actionName == "왕도: 범위화" || actionName == "왕도: 지속시간 증가")) {
+					getLog(from, '', getActionCode(actionName), actionName)
+					if (lastLog.msg.split("|")[0] == '30') {
+						if (AstData[name].use)
+							AstData[name].use = false
+						else
+							AstData[name].loyalRoad = "단일"
+					}
 				}
 			}
-
 			//로그 수집 시작
 			if (startFlag) {
 				//21 : 시전 대상 체크  
@@ -135,7 +138,12 @@ function BeforeLogLineRead(e) {
 						var name = createAst(from)
 						if (AstData[name].loyalRoad != '광역')
 							AstData[name].to = to
+						AstData[name].use = true
 					}
+					else if (actionName == '묘수'){
+						var name = createAst(from)
+						AstData[name].use = false
+					}						
 				}
 				//00 : 인게임 전투 로그 
 				else if (lastLog.msg.split("|")[0] == '00') {
@@ -144,6 +152,7 @@ function BeforeLogLineRead(e) {
 						var from = lastLog.msg.split("|")[4].match(log3)[2]
 						if (from.indexOf("") > -1)
 							from = from.split("")[1].split("")[0]
+						var name = from.replace(/ /g, "").replace(/'/g, "_")
 						var actionName = lastLog.msg.split("|")[4].match(log3)[4]
 						getLog(from, '', getActionCode(actionName), actionName)
 					}
@@ -348,8 +357,8 @@ function createAst(from) {
 		if (startFlag)
 			$('#member').append('<span class="btn_ast" id="' + name + '">' + from + '</span>')
 		// 내가 점성술사면 on 
-		if (AstData[myName])
-			$('#' + myName).addClass('on')
+		if (from == myName)
+			$('#' + name).addClass('on')
 	}
 	return name
 }
@@ -375,6 +384,7 @@ function Ast() {
 		"1D14": 0,
 		"1D15": 0
 	}
+	this.use = false
 	this.loyalRoad = "단일"
 	this.keep = ""
 	this.to = ""
