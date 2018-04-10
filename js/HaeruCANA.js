@@ -186,10 +186,10 @@ function getLog(from, to, actionCode, actionName) {
 		case "391": case "392": case "393": case "394": case "395": case "396": case "1D14": case "1D15":
 			AstData[name].cardCount[actionCode]++;
 			$('#member').find('span').removeClass('on')
-			if (myJob == "AST") {
-				$('#' + actionCode).find('.num').text(AstData[myName].cardCount[actionCode])
-				$('#' + myName).addClass('on')
-				changeList(myName)
+			if (myJob == "AST" && myName == from) {
+				$('#' + actionCode).find('.num').text(AstData[name].cardCount[actionCode])
+				$('#' + name).addClass('on')
+				changeList(name)
 			} else {
 				$('#' + actionCode).find('.num').text(AstData[name].cardCount[actionCode])
 				$('#member').find('span').removeClass('on')
@@ -202,10 +202,10 @@ function getLog(from, to, actionCode, actionName) {
 		case "E06": case "1D18": case "E07": case "E08": case "E09": case "1D13":
 			AstData[name].cardAction[actionCode]++;
 			$('#member').find('span').removeClass('on')
-			if (myJob == "AST") {
-				$('#' + actionCode).find('.num').text(AstData[myName].cardAction[actionCode])
-				$('#' + myName).addClass('on')
-				changeList(myName)
+			if (myJob == "AST" && myName == from) {
+				$('#' + actionCode).find('.num').text(AstData[name].cardAction[actionCode])
+				$('#' + name).addClass('on')
+				changeList(name)
 			} else {
 				$('#' + actionCode).find('.num').text(AstData[name].cardAction[actionCode])
 				$('#member').find('span').removeClass('on')
