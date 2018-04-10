@@ -108,10 +108,15 @@ function BeforeLogLineRead(e) {
 
 			//사전 왕도 처리
 			if (lastLog.msg.split("|")[0] == '26' || lastLog.msg.split("|")[0] == '30') {
-				var from = lastLog.msg.split("|")[6]
+				var from = lastLog.msg.split("|")[6]						
+				var name = from.replace(/ /g, "").replace(/'/g, "_")
 				var actionName = lastLog.msg.split("|")[3]
-				if (actionName == "왕도: 효과 향상" || actionName == "왕도: 범위화" || actionName == "왕도: 지속시간 증가")
-					getLog(from, '', getActionCode(actionName), actionName)
+				if (actionName == "왕도: 효과 향상" || actionName == "왕도: 범위화" || actionName == "왕도: 지속시간 증가"){
+					if(lastLog.msg.split("|")[0] == '26')
+						getLog(from, '', getActionCode(actionName), actionName)
+					else
+						AstData[name].loyalRoad = "단일"
+				}
 			}
 
 			//로그 수집 시작
