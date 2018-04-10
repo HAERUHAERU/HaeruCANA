@@ -348,7 +348,12 @@ function createAst(from) {
 	if (lastData.Combatant[tempName].Job == "Ast") {
 		if (AstData[name] == null) {
 			AstData[name] = new Ast()
-			$('#member').append('<span class="btn_ast" id="' + name + '">' + from + '</span>')
+			// 점성술사 리스트 생성
+			if(startFlag)
+				$('#member').append('<span class="btn_ast" id="' + name + '">' + from + '</span>')
+			// 내가 점성술사면 on 
+			if(AstData[myName])
+				$('#' + myName).addClass('on')
 		}
 	}
 	return name
