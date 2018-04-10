@@ -11,18 +11,18 @@ function reset(flag) {
 			break
 		case "btn":
 			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
-			$('.scrollArea').html('');			
-			if(!lastData.isActive && !$('#notice').length)
+			$('.scrollArea').html('');
+			if (!lastData.isActive && !$('#notice').length)
 				$('#target').text('[--:--] 초기화 완료!')
 			$('#member').html('')
 			startFlag = false
-			initFlag = true 
+			initFlag = true
 			break
 		case "autoReset":
 			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
 			$('.scrollArea').html('');
-			if(!lastData.isActive && !$('#notice').length)
-			$('#target').text('[--:--] 초읽기·전투 시작을 인식!')
+			if (!lastData.isActive && !$('#notice').length)
+				$('#target').text('[--:--] 초읽기·전투 시작을 인식!')
 			$('#member').html('')
 			startFlag = true
 			break
@@ -67,19 +67,19 @@ function BeforeLogLineRead(e) {
 				//타임라인 초기화
 				$('#notice').remove()
 				if (!$('#notice').length)
-				$('#target').text('[' + lastData.Encounter.duration + '] ' + lastData.Encounter.title)	
+					$('#target').text('[' + lastData.Encounter.duration + '] ' + lastData.Encounter.title)
 				//전투 집계 끝났을 때 
-				if (lastData.Encounter.title == "Encounter"){				
+				if (lastData.Encounter.title == "Encounter") {
 					if (startFlag == false) {
 						reset('autoReset')
 						startFlag = true
 					}
 				}
-			}else {
+			} else {
 				if (!$('#notice').length)
-				$('#target').text('[' + lastData.Encounter.duration + '] ' + lastData.Encounter.title)
-				startFlag = false	
-				reset('endEncounter')		
+					$('#target').text('[' + lastData.Encounter.duration + '] ' + lastData.Encounter.title)
+				startFlag = false
+				reset('endEncounter')
 			}
 			break
 		case "Chat":
@@ -87,11 +87,11 @@ function BeforeLogLineRead(e) {
 			var startLog2 = /^(전투 시작 \d초 전\! \((.*?)\))$/im
 			var startLog3 = /^(전투 시작\!)$/im
 			var cancelLog = /^((.*?) 님이 초읽기를 취소했습니다.)/im
-			
+
 			//초읽기 처리 구문
 			if (lastLog.msg.split("|")[0] == '00') {
-				if (lastLog.msg.split("|")[4].match(startLog1) || lastLog.msg.split("|")[4].match(startLog2)) {					
-					if (autoResetFlag && !lastData.isActive){
+				if (lastLog.msg.split("|")[4].match(startLog1) || lastLog.msg.split("|")[4].match(startLog2)) {
+					if (autoResetFlag && !lastData.isActive) {
 						reset('autoReset')
 						autoResetFlag = false
 					}
@@ -99,8 +99,8 @@ function BeforeLogLineRead(e) {
 				}
 				else if (lastLog.msg.split("|")[4].match(cancelLog))
 					reset('btn')
-				else if (lastLog.msg.split("|")[4].match(startLog3)){
-					if(!lastData.isActive && !$('#notice').length && !initFlag){
+				else if (lastLog.msg.split("|")[4].match(startLog3)) {
+					if (!lastData.isActive && !$('#notice').length && !initFlag) {
 						$('#target').text('[--:--] 전투 시작!')
 					}
 				}
@@ -135,7 +135,6 @@ function BeforeLogLineRead(e) {
 				//00 : 인게임 전투 로그 
 				else if (lastLog.msg.split("|")[0] == '00') {
 					var log3 = /^((.*?)(이|가) (여왕의 날개|왕의 검|위상 변화|소 아르카나|보류|점지|묘수|왕도|아제마의 균형|세계수의 줄기|오쉬온의 화살|할로네의 창|살리아크의 물병|비레고의 탑|천궁의 반목)(을|를) 시전했습니다.)$/im
-
 					if (lastLog.msg.split("|")[4].match(log3)) {
 						var from = lastLog.msg.split("|")[4].match(log3)[2]
 						if (from.indexOf("") > -1)
@@ -338,23 +337,14 @@ function createTimeline(from, to, actionCode, actionName) {
 //----------------------------------------------------------------------------------------
 function createAst(from) {
 	var name = from.replace(/ /g, "").replace(/'/g, "_")
-	//점성술사 등록 
-	var tempName = ''
-	if (from == myName) {
-		tempName = 'YOU'
-	} else {
-		tempName = from
-	}
-	if (lastData.Combatant[tempName].Job == "Ast") {
-		if (AstData[name] == null) {
-			AstData[name] = new Ast()
-			// 점성술사 리스트 생성
-			if(startFlag)
-				$('#member').append('<span class="btn_ast" id="' + name + '">' + from + '</span>')
-			// 내가 점성술사면 on 
-			if(AstData[myName])
-				$('#' + myName).addClass('on')
-		}
+	if (AstData[name] == null) {
+		AstData[name] = new Ast()
+		// 점성술사 리스트 생성
+		if (startFlag)
+			$('#member').append('<span class="btn_ast" id="' + name + '">' + from + '</span>')
+		// 내가 점성술사면 on 
+		if (AstData[myName])
+			$('#' + myName).addClass('on')
 	}
 	return name
 }
