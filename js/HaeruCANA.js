@@ -1,6 +1,6 @@
 //버전
 $(document).ready(function(){
-	$('#ver').text('버전 : ver.1.0.180412')
+	$('#ver').text('버전 : ver.1.0.180412_1')
 })
 
 
@@ -134,7 +134,7 @@ function BeforeLogLineRead(e) {
 			//로그 수집 시작
 			if (startFlag) {
 				//21 : 시전 대상 체크  
-				if (lastLog.msg.split("|")[0] == '21' || lastLog.msg.split("|")[0] == '22') {
+				if ((lastLog.msg.split("|")[0] == '21' || lastLog.msg.split("|")[0] == '22') && !actionFlag) {
 					var from = lastLog.msg.split("|")[3]
 					var to = lastLog.msg.split("|")[7]
 					var actionName = lastLog.msg.split("|")[5]
@@ -153,6 +153,7 @@ function BeforeLogLineRead(e) {
 						var name = createAst(from)
 						AstData[name].use = false
 					}						
+					actionFlag = true 
 				}
 				//00 : 인게임 전투 로그 
 				else if (lastLog.msg.split("|")[0] == '00') {
@@ -257,6 +258,7 @@ function getLog(from, to, actionCode, actionName) {
 		case "33D": case "33E": case "33F": case "340": case "341": case "342":
 		case "0F": case "0A":
 			createTimeline(from, to, actionCode, actionName)
+			actionFlag = false
 			break
 	}
 }
@@ -383,7 +385,7 @@ function createTimeline(from, to, actionCode, actionName) {
 			$('#notice').remove()
 			$('.scrollArea').prepend(html);
 			break 
-	}
+	}	
 }
 
 //점성술사 데이터 처리
@@ -441,3 +443,4 @@ var lastDataActive = false
 var startFlag = false
 var autoResetFlag = true
 var initFlag = false
+var actionFlag = false 
