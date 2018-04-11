@@ -12,7 +12,7 @@ function reset(flag) {
 		case "btn":
 			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
 			$('.scrollArea').html('');
-			if (!lastData.isActive && !$('#notice').length)
+			if (!lastDataActive && !$('#notice').length)
 				$('#target').text('[--:--] 초기화 완료!')
 			$('#member').html('')
 			startFlag = false
@@ -21,7 +21,7 @@ function reset(flag) {
 		case "autoReset":
 			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
 			$('.scrollArea').html('');
-			if (!lastData.isActive && !$('#notice').length)
+			if (!lastDataActive && !$('#notice').length)
 				$('#target').text('[--:--] 초읽기·전투 시작을 인식!')
 			$('#member').html('')
 			startFlag = true
@@ -64,6 +64,7 @@ function BeforeLogLineRead(e) {
 			lastData = lastLog.msg  //최신 전투 정보 저장
 			//타겟 정보 출력
 			if (lastData.isActive) {
+				lastDataActive = true
 				//타임라인 초기화
 				$('#notice').remove()
 				if (!$('#notice').length)
@@ -75,11 +76,12 @@ function BeforeLogLineRead(e) {
 						startFlag = true
 					}
 				}
-			} else {
+			} else {				
 				if (!$('#notice').length)
 					$('#target').text('[' + lastData.Encounter.duration + '] ' + lastData.Encounter.title)
 				startFlag = false
 				reset('endEncounter')
+				lastDataActive = false
 			}
 			break
 		case "Chat":
@@ -88,10 +90,12 @@ function BeforeLogLineRead(e) {
 			var startLog3 = /^(전투 시작\!)$/im
 			var cancelLog = /^((.*?) 님이 초읽기를 취소했습니다.)/im
 
+			
+
 			//초읽기 처리 구문
 			if (lastLog.msg.split("|")[0] == '00') {
 				if (lastLog.msg.split("|")[4].match(startLog1) || lastLog.msg.split("|")[4].match(startLog2)) {
-					if (autoResetFlag && !lastData.isActive) {
+					if (autoResetFlag && !lastDataActive) {
 						reset('autoReset')
 						autoResetFlag = false
 					}
@@ -100,7 +104,7 @@ function BeforeLogLineRead(e) {
 				else if (lastLog.msg.split("|")[4].match(cancelLog))
 					reset('btn')
 				else if (lastLog.msg.split("|")[4].match(startLog3)) {
-					if (!lastData.isActive && !$('#notice').length && !initFlag) {
+					if (!lastDataActive && !$('#notice').length && !initFlag) {
 						$('#target').text('[--:--] 전투 시작!')
 					}
 				}
@@ -148,6 +152,8 @@ function BeforeLogLineRead(e) {
 				//00 : 인게임 전투 로그 
 				else if (lastLog.msg.split("|")[0] == '00') {
 					var log3 = /^((.*?)(이|가) (여왕의 날개|왕의 검|위상 변화|소 아르카나|보류|점지|묘수|왕도|아제마의 균형|세계수의 줄기|오쉬온의 화살|할로네의 창|살리아크의 물병|비레고의 탑|천궁의 반목)(을|를) 시전했습니다.)$/im
+					var log4 = /^((.*?)(이|가) (속임수 공격|전투 기도|과충전|연환계|전장의 노래|성원)(을|를) 시전했습니다.)$/im
+					
 					if (lastLog.msg.split("|")[4].match(log3)) {
 						var from = lastLog.msg.split("|")[4].match(log3)[2]
 						if (from.indexOf("") > -1)
@@ -155,6 +161,13 @@ function BeforeLogLineRead(e) {
 						var name = from.replace(/ /g, "").replace(/'/g, "_")
 						var actionName = lastLog.msg.split("|")[4].match(log3)[4]
 						getLog(from, '', getActionCode(actionName), actionName)
+					}else if (lastLog.msg.split("|")[4].match(log4)){
+						var from = lastLog.msg.split("|")[4].match(log4)[2]
+						if (from.indexOf("") > -1)
+							from = from.split("")[1].split("")[0]
+						var name = from.replace(/ /g, "").replace(/'/g, "_")
+						var actionName = lastLog.msg.split("|")[4].match(log4)[4]
+						createTimeline(from, '', getActionCode(actionName), actionName)
 					}
 				}
 				//26: 효과 받음 
@@ -279,6 +292,13 @@ function getActionCode(actionName) {
 		case "보류: 할로네의 창": return "39B"
 		case "보류: 살리아크의 물병": return "39C"
 		case "보류: 비레고의 탑": return "39D"
+
+		case "전장의 노래": return "76"
+		case "속임수 공격": return "8D2"
+		case "전투 기도": return "DE5"
+		case "과충전": return "B45"
+		case "연환계": return "1D0C"
+		case "성원": return "1D60"
 	}
 }
 
@@ -290,7 +310,7 @@ function createTimeline(from, to, actionCode, actionName) {
 	var arrow = '→'
 	var eff = ''
 
-	if (lastData.isActive)
+	if (lastDataActive)
 		var duration = lastData.Encounter.duration;
 	else
 		var duration = "--:--"
@@ -342,8 +362,21 @@ function createTimeline(from, to, actionCode, actionName) {
 
 			AstData[name].loyalRoad = "단일"
 			AstData[name].to = ""
-
 			break
+		case "76": case "8D2": case "DE5": case "B45": case "1D0C": case "1D60":	
+			var html = '<table><tr>'
+				+ '<td class="cell_1 cnt">' + duration + '</td>'
+				+ '<td class="cell_1"><img src="img/' + actionCode + '.png"></td>'
+				+ '<td class="cell_2">' + actionName + '</td>'
+				+ '<td class="cell_4"></td>'
+				+ '<td class="cell_3 from"><span class="cnt">' + from + '</span></td>'
+				+ '<td class="cell_1 cnt"></td>'
+				+ '<td class="cell_3 to"></td>'
+				+ '</tr></table><div class="underline"></div>';
+
+			$('#notice').remove()
+			$('.scrollArea').prepend(html);
+			break 
 	}
 }
 
@@ -397,6 +430,7 @@ var myName = null
 var myJob = null
 var AstData = new Object()
 var lastData = null
+var lastDataActive = false
 
 var startFlag = false
 var autoResetFlag = true
