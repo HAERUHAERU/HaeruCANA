@@ -167,7 +167,8 @@ function BeforeLogLineRead(e) {
 							from = from.split("")[1].split("")[0]
 						var name = from.replace(/ /g, "").replace(/'/g, "_")
 						var actionName = lastLog.msg.split("|")[4].match(log4)[4]
-						createTimeline(from, '', getActionCode(actionName), actionName)
+						if(actionName == "속임수 공격" || actionName == "전투 기도" || actionName == "과충전" || actionName == "연환계" || actionName == "전장의 노래" || actionName == "성원")
+							createTimeline(from, '', getActionCode(actionName), actionName)
 					}
 				}
 				//26: 효과 받음 
