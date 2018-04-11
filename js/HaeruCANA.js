@@ -129,7 +129,7 @@ function BeforeLogLineRead(e) {
 			//로그 수집 시작
 			if (startFlag) {
 				//21 : 시전 대상 체크  
-				if (lastLog.msg.split("|")[0] == '21') {
+				if (lastLog.msg.split("|")[0] == '21' || lastLog.msg.split("|")[0] == '22') {
 					var from = lastLog.msg.split("|")[3]
 					var to = lastLog.msg.split("|")[7]
 					var actionName = lastLog.msg.split("|")[5]
