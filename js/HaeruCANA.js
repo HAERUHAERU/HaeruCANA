@@ -1,6 +1,6 @@
 //버전
 $(document).ready(function(){
-	$('#ver').text('버전 : ver.1.0.180412_2')
+	$('#ver').text('버전 : ver.1.0.180412_4')
 })
 
 
@@ -8,13 +8,13 @@ $(document).ready(function(){
 //----------------------------------------------------------------------------------------
 
 function reset(flag) {
-	AstData = new Object()
 	autoResetFlag = true
 	switch (flag) {
 		case "endEncounter":
 			startFlag = false
 			break
-		case "btn":
+		case "btn":			
+			AstData = new Object()
 			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
 			$('.scrollArea').html('');
 			if (!lastDataActive && !$('#notice').length)
@@ -23,7 +23,8 @@ function reset(flag) {
 			startFlag = false
 			initFlag = true
 			break
-		case "autoReset":
+		case "autoReset":				
+			AstData = new Object()
 			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
 			$('.scrollArea').html('');
 			if (!lastDataActive && !$('#notice').length)
@@ -56,7 +57,6 @@ function changeList(id) {
 //----------------------------------------------------------------------------------------
 function BeforeLogLineRead(e) {
 	var lastLog = JSON.parse(e)    //최신 로그를 객체로 변경
-
 	switch (lastLog.msgtype) {
 		case "SendCharName":
 			myName = lastLog.msg.charName
@@ -138,10 +138,10 @@ function BeforeLogLineRead(e) {
 					var actionName = lastLog.msg.split("|")[5]
 					var actionCode = lastLog.msg.split("|")[9]
 					//시간 지연
-					if (actionCode == '0F')
+					if (actionName == '시간 지연')
 						getLog(from, to, actionCode, actionName)
 					//카드 시전 시 대상 저장 (광역 제외)             
-					else if (actionCode == '33D' || actionCode == '33E' || actionCode == '33F' || actionCode == '340' || actionCode == '341' || actionCode == '342') {
+					else if (actionName == '아제마의 균형' || actionName == '세계수의 줄기' || actionName == '오쉬온의 화살' || actionName == '할로네의 창'|| actionName == '살리아크의 물병'|| actionName == '비레고의 탑') {
 						var name = createAst(from)
 						if (AstData[name].loyalRoad != '광역')
 							AstData[name].to = to
@@ -399,7 +399,10 @@ function createAst(from) {
 	}
 	return name
 }
-
+function Person(){
+	this.job = ""
+	this.name = ""
+}
 function Ast() {
 	//점지(E06),묘수 (1D18), 왕도(E07), 보류(E08), 위상변화(E09), 소 아르카나(1D13)
 	this.cardAction = {
