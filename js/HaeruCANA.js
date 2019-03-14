@@ -1,7 +1,3 @@
-
-$(document).ready(function(){
-	$('#ver').text('버전 : ver.1.2.190314')
-})
 $(window).resize(function () {
 	$('.scrollArea').css('height', '-webkit-calc(100vh - 162px)')
 
