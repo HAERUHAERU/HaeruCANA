@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>해루카나 (카드분석기)</title>
+    <title>해루카나 (카드/시너지 분석기)</title>
     <script src="js/jquery-2.1.1.min.js" type="text/javascript"></script>
     <script>
         var wsUri1 = "ws://@HOST_PORT@/BeforeLogLineRead"; /*DO NOT EDIT THIS VALUE*/
@@ -15,7 +15,6 @@
             margin: 0;
             padding: 0;
         }
-
         div {
             -ms-user-select: none;
             -moz-user-select: -moz-none;
@@ -24,7 +23,6 @@
             user-select: none;
             cursor: default;
         }
-
         html {
             width: 100%;
             height: 100%;
@@ -34,13 +32,11 @@
             color: #fff;
             overflow: hidden;
         }
-
         body {
             width: 98%;
             height: 98%;
             margin: 1%;
         }
-
         .lineBox {
             background: rgba(0, 0, 0, 0.5);
             width: 100%;
@@ -48,14 +44,12 @@
             margin-bottom: .5rem;
             height: 2.2rem;
         }
-
         .lineBox div,
         .tabArea div {
             position: absolute;
             margin: 0.5rem;
             font-size: 1.1rem;
         }
-
         .scrollBox {
             background: rgba(0, 0, 0, 0.5);
             width: 100%;
@@ -63,56 +57,45 @@
             margin-bottom: .5rem;
             padding-top: .5rem;
         }
-
         .scrollArea {
             width: -webkit-calc(100% - 1rem);
-            height: 17rem;
             padding-left: .5rem;
             overflow-x: hidden;
             overflow-y: auto;
             font-size: 1.1rem;
-
         }
-
         ::-webkit-scrollbar,
         scrollbar {
             width: .25rem;
             height: .25rem;
         }
-
         ::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.1);
             border-radius: .25rem;
         }
-
         img {
             width: 2.2rem;
         }
-
         td>img {
             padding: 0 .5rem;
         }
-
         .tabBox {
             width: 100%;
             height: 2.2rem;
             margin-bottom: .5rem;
         }
-
         .tabArea {
             background: rgba(0, 0, 0, 0.5);
             width: 50%;
             float: left;
             height: 2.2rem;
         }
-
         table {
             width: 95%;
             font-size: 1.1rem;
             table-layout: fixed;
             border-collapse: collapse;
         }
-
         table,
         td {
             text-align: right;
@@ -120,54 +103,43 @@
             text-overflow: ellipsis;
             overflow: hidden;
         }
-
         .line {
             color: rgba(255, 255, 255, 0.1);
         }
-
         .underline {
             width: 95%;
             height: .1rem;
             background: rgba(255, 255, 255, 0.1);
             margin-bottom: .25rem;
         }
-
         .harf {
             width: 25%;
         }
-
         .cnt {
             color: rgb(155, 155, 155)
         }
-
         .num {
             font-weight: bold;
         }
-
         .abName {
             color: coral;
         }
-
         .eff1 {
             color: orchid;
             font-weight: bold;
         }
-
         .eff2 {
             color: turquoise;
             font-weight: bold;
         }
-
         .eff3 {
             color: springgreen;
             font-weight: bold;
         }
-
         .eff4 {
             color: gold;
             font-weight: bold;
         }
-
         .cell_1,
         .cell_2,
         .cell_3,
@@ -179,39 +151,34 @@
             vertical-align: middle;
             table-layout: fixed;
         }
-
         .cell_1 {
             width: 3rem;
         }
-
         .cell_2 {
             width: 8rem;
             text-align: left;
         }
-
         .cell_3 {
             width: 100%;
             text-overflow: clip
         }
-
         .cell_4 {
             width: 5rem;
         }
-
         #member {
             right: .25rem;
             float: right;
+            overflow: hidden;
         }
-
         #member>span {
             margin-left: 1rem;
         }
-
-        #member>span:hover, #reset:hover, #capture:hover {
+        #member>span:hover,
+        #reset:hover,
+        #astInfo:hover {
             cursor: pointer;
             text-shadow: 0 0 .3rem #fff;
         }
-
         .on {
             color: coral;
             font-weight: bold;
@@ -223,28 +190,31 @@
     <!-- 타겟 및 캐릭터 정보 -->
     <div class="lineBox">
         <div id="target" style="color:skyblue; font-weight: bold">[--:--] 해루카나 (카드분석기)</div>
+        <div id="astInfo"  onclick="reset('astInfo')"  style="right:5rem">Hide</div>
         <div id="reset" onclick="reset('btn')" style="right:.25rem">Reset</div>
     </div>
     <!-- 스크롤 영역: 카드 실시간 내역 -->
     <div class="scrollBox">
         <div class="scrollArea">
             <div id="notice">
-                <font style="color:red; font-weight: bold;">1. ACT > Plugins > ACTWebSocket > 메시지 필터 > BeforeLogLineRead 체크 필수</font><br><br>
+                <font style="color:red; font-weight: bold;">1. ACT > Plugins > ACTWebSocket > 메시지 필터 > BeforeLogLineRead
+                    체크 필수</font><br><br>
                 2. 웹소켓(ACTWebSocket) 플러그인 전용입니다.<br><br>
                 3. 초읽기 이후 또는 전투 중에만 동작합니다.<br><br>
-                4. 점성술사 아이디에 마우스를 갖다대면 정보를 확인할 수 있습니다.<br><br>
-                <div class="cnt">버전 : ver.1.2.190314</div>
+                4. 초읽기를 실행하면 자동으로 리셋됩니다.<br><br>
+                5. 점성술사 아이디에 마우스를 갖다대면 정보를 확인할 수 있습니다.<br><br>
+                <div class="cnt">버전 : ver.1.3.190315 (on 10 Apr 2018)</div>
                 <font style="color:gold">문의 : 모그리@해루</font><br>
                 <font style="color:skyblue">주의 : (베타 버전) 기록이 정확하지 않을 수도 있음!</font>
             </div>
         </div>
     </div>
-    <div class="lineBox">
-        <div class="abName">점성술사</div>
-        <div id="member"></div>
-    </div>
-    <!-- 카드 분석 카운트 영역 -->
-    <div class="tabBox" style="height: 4.4rem;">
+    <div class="ast">
+        <div class="lineBox">
+            <div class="abName">점성술사</div>
+            <div id="member"></div>
+        </div>
+        <!-- 카드 분석 카운트 영역 -->
         <div class="tabArea harf" style="border-top-left-radius: .5rem;">
             <div class="abName">점지</div>
             <div id="E06" style="right:75%">
@@ -274,93 +244,93 @@
             </div>
         </div>
 
-        <div class="tabArea" style="border-bottom-left-radius: .5rem;">
+        <div class="tabArea">
             <div class="abName">위상 변화</div>
             <div id="E09" style="right:50%">
                 <span class="num">0</span>
                 <span class="cnt"> 회</span>
             </div>
         </div>
-        <div class="tabArea" style="border-bottom-right-radius: .5rem;">
+        <div class="tabArea">
             <div class="abName">소 아르카나</div>
             <div id="1D13" style="right:.25rem">
                 <span class="num">0</span>
                 <span class="cnt"> 회</span>
             </div>
         </div>
-    </div>
 
-    <!-- 카드 분석 점지 영역 -->
-    <div class="tabArea harf" style="border-top-left-radius: .5rem;">
-        <div style="margin:0;">
-            <img src="img/icon_1.png">
+        <!-- 카드 분석 점지 영역 -->
+        <div class="tabArea harf">
+            <div style="margin:0;">
+                <img src="img/icon_1.png">
+            </div>
+            <div id="391" style="right:75%">
+                <span class="num">0</span>
+                <span class="cnt"> 회</span>
+            </div>
         </div>
-        <div id="391" style="right:75%">
-            <span class="num">0</span>
-            <span class="cnt"> 회</span>
+        <div class="tabArea harf">
+            <div style="margin:0;">
+                <img src="img/icon_3.png">
+            </div>
+            <div id="393" style="right:50%">
+                <span class="num">0</span>
+                <span class="cnt"> 회</span>
+            </div>
         </div>
-    </div>
-    <div class="tabArea harf">
-        <div style="margin:0;">
-            <img src="img/icon_3.png">
+        <div class="tabArea harf">
+            <div style="margin:0;">
+                <img src="img/icon_5.png">
+            </div>
+            <div id="395" style="right:25%">
+                <span class="num">0</span>
+                <span class="cnt"> 회</span>
+            </div>
         </div>
-        <div id="393" style="right:50%">
-            <span class="num">0</span>
-            <span class="cnt"> 회</span>
+        <div class="tabArea harf">
+            <div style="margin:0;">
+                <img src="img/icon_7.png">
+            </div>
+            <div id="1D14" style="right:.25rem">
+                <span class="num">0</span>
+                <span class="cnt"> 회</span>
+            </div>
         </div>
-    </div>
-    <div class="tabArea harf">
-        <div style="margin:0;">
-            <img src="img/icon_5.png">
+        <div class="tabArea harf" style="border-bottom-left-radius: .5rem;">
+            <div style="margin:0;">
+                <img src="img/icon_2.png">
+            </div>
+            <div id="392" style="right:75%">
+                <span class="num">0</span>
+                <span class="cnt"> 회</span>
+            </div>
         </div>
-        <div id="395" style="right:25%">
-            <span class="num">0</span>
-            <span class="cnt"> 회</span>
+        <div class="tabArea harf">
+            <div style="margin:0;">
+                <img src="img/icon_4.png">
+            </div>
+            <div id="394" style="right:50%">
+                <span class="num">0</span>
+                <span class="cnt"> 회</span>
+            </div>
         </div>
-    </div>
-    <div class="tabArea harf" style="border-top-right-radius: .5rem;">
-        <div style="margin:0;">
-            <img src="img/icon_7.png">
+        <div class="tabArea harf">
+            <div style="margin:0;">
+                <img src="img/icon_6.png">
+            </div>
+            <div id="396" style="right:25%">
+                <span class="num">0</span>
+                <span class="cnt"> 회</span>
+            </div>
         </div>
-        <div id="1D14" style="right:.25rem">
-            <span class="num">0</span>
-            <span class="cnt"> 회</span>
-        </div>
-    </div>
-    <div class="tabArea harf" style="border-bottom-left-radius: .5rem;">
-        <div style="margin:0;">
-            <img src="img/icon_2.png">
-        </div>
-        <div id="392" style="right:75%">
-            <span class="num">0</span>
-            <span class="cnt"> 회</span>
-        </div>
-    </div>
-    <div class="tabArea harf">
-        <div style="margin:0;">
-            <img src="img/icon_4.png">
-        </div>
-        <div id="394" style="right:50%">
-            <span class="num">0</span>
-            <span class="cnt"> 회</span>
-        </div>
-    </div>
-    <div class="tabArea harf">
-        <div style="margin:0;">
-            <img src="img/icon_6.png">
-        </div>
-        <div id="396" style="right:25%">
-            <span class="num">0</span>
-            <span class="cnt"> 회</span>
-        </div>
-    </div>
-    <div class="tabArea harf" style="border-bottom-right-radius: .5rem;">
-        <div style="margin:0;">
-            <img src="img/icon_8.png">
-        </div>
-        <div id="1D15" style="right:.25rem">
-            <span class="num">0</span>
-            <span class="cnt"> 회</span>
+        <div class="tabArea harf" style="border-bottom-right-radius: .5rem;">
+            <div style="margin:0;">
+                <img src="img/icon_8.png">
+            </div>
+            <div id="1D15" style="right:.25rem">
+                <span class="num">0</span>
+                <span class="cnt"> 회</span>
+            </div>
         </div>
     </div>
 </body>
