@@ -1,14 +1,45 @@
-$(window).resize(function () {
-	$('.scrollArea').css('height', '-webkit-calc(100vh - 162px)')
-
+$(document).ready(function(){
+	if(!localStorage.getItem("astInfoToggle")){
+		localStorage.setItem("astInfoToggle", true)
+	}
+	astInfoCheckFlag = localStorage.getItem("astInfoToggle")
+	calHeight(astInfoCheckFlag)
+	
 });
+
+
+$(window).resize(function () {
+	calHeight(astInfoCheckFlag)
+});
+
+function calHeight(flag){
+	if(flag == 'true'){		
+		$('.scrollArea').css('height', '-webkit-calc(100vh - 160px)')		
+		$('.ast').show()
+		$('#astInfo').text("Hide")
+	}else{
+		$('.scrollArea').css('height', '-webkit-calc(100vh - 40px)')		
+		$('.ast').hide()
+		$('#astInfo').text("Show")	
+	}
+	localStorage.setItem("astInfoToggle", flag)
+	astInfoCheckFlag = flag
+}
+
+
 function reset(flag) {
 	autoResetFlag = true
 	switch (flag) {
 		case "endEncounter":
 			startFlag = false
 			break
-		case "btn":			
+		case "astInfo":
+			if( astInfoCheckFlag == 'true')
+				calHeight('false')
+			else			
+				calHeight('true')
+			break
+		case "btn":
 			AstData = new Object()
 			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
 			$('.scrollArea').html('');
@@ -18,7 +49,7 @@ function reset(flag) {
 			startFlag = false
 			initFlag = true
 			break
-		case "autoReset":				
+		case "autoReset":
 			AstData = new Object()
 			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
 			$('.scrollArea').html('');
@@ -29,11 +60,15 @@ function reset(flag) {
 			break
 	}
 }
+
+
 $(document).on('mouseover', '.btn_ast', function () {
 	changeList(this.id)
 	$('#member').find('span').removeClass('on')
 	$('#' + this.id).addClass('on')
 });
+
+
 function changeList(id) {
 	var actionCode = ["E06", "1D18", "E07", "E08", "E09", "1D13", "391", "392", "393", "394", "395", "396", "1D14", "1D15"]
 	for (var j in actionCode) {
@@ -43,6 +78,9 @@ function changeList(id) {
 			$('#' + actionCode[j]).find('.num').text(AstData[id].cardCount[actionCode[j]])
 	}
 }
+
+
+
 function BeforeLogLineRead(e) {
 	var lastLog = JSON.parse(e)    
 	switch (lastLog.msgtype) {
@@ -69,7 +107,7 @@ function BeforeLogLineRead(e) {
 						startFlag = true
 					}
 				}
-			} else {				
+			} else {
 				if (!$('#notice').length)
 					$('#target').text('[' + lastData.Encounter.duration + '] ' + lastData.Encounter.title)
 				startFlag = false
@@ -81,7 +119,9 @@ function BeforeLogLineRead(e) {
 			var startLog1 = /^(전투 시작 \d\d초 전\! \((.*?)\))$/im
 			var startLog2 = /^(전투 시작 \d초 전\! \((.*?)\))$/im
 			var startLog3 = /^(전투 시작\!)$/im
-			var cancelLog = /^((.*?) 님이 초읽기를 취소했습니다.)/im			
+			var cancelLog = /^((.*?) 님이 초읽기를 취소했습니다.)/im
+
+			
 			if (lastLog.msg.split("|")[0] == '00') {
 				if (lastLog.msg.split("|")[4].match(startLog1) || lastLog.msg.split("|")[4].match(startLog2)) {
 					if (autoResetFlag && !lastDataActive) {
@@ -97,7 +137,9 @@ function BeforeLogLineRead(e) {
 						$('#target').text('[--:--] 전투 시작!')
 					}
 				}
-			}	
+			}
+			
+			
 			if (lastLog.msg.split("|")[0] == '30' || lastLog.msg.split("|")[0] == '26') {
 				var from = lastLog.msg.split("|")[6]
 				var name = from.replace(/ /g, "").replace(/'/g, "_")
@@ -112,7 +154,8 @@ function BeforeLogLineRead(e) {
 							AstData[name].loyalRoad = "단일"
 					}
 				}
-			}			
+			}
+			
 			if (startFlag) {
 				
 				if (lastLog.msg.split("|")[0] == '21' || lastLog.msg.split("|")[0] == '22') {
@@ -124,22 +167,22 @@ function BeforeLogLineRead(e) {
 					if (actionName == '시간 지연' || actionName == '용의 시선')
 						getLog(from, to, actionCode, actionName)
 					
-					else if (actionName == '아제마의 균형' || actionName == '세계수의 줄기' || actionName == '오쉬온의 화살' || actionName == '할로네의 창'|| actionName == '살리아크의 물병'|| actionName == '비레고의 탑') {
+					else if (actionName == '아제마의 균형' || actionName == '세계수의 줄기' || actionName == '오쉬온의 화살' || actionName == '할로네의 창' || actionName == '살리아크의 물병' || actionName == '비레고의 탑') {
 						var name = createAst(from)
 						if (AstData[name].loyalRoad != '광역')
 							AstData[name].to = to
 						AstData[name].use = true
 					}
-					else if (actionName == '묘수'){
+					else if (actionName == '묘수') {
 						var name = createAst(from)
 						AstData[name].use = false
-					}						
+					}
 				}
 				
 				else if (lastLog.msg.split("|")[0] == '00') {
 					var log3 = /^((.*?)(이|가) (여왕의 날개|왕의 검|위상 변화|소 아르카나|보류|점지|묘수|왕도|아제마의 균형|세계수의 줄기|오쉬온의 화살|할로네의 창|살리아크의 물병|비레고의 탑|천궁의 반목)(을|를) 시전했습니다.)$/im
 					var log4 = /^((.*?)(이|가) (속임수 공격|전투 기도|과충전|연환계|전장의 노래|성원|도원결의|마인의 진혼곡)(을|를) 시전했습니다.)$/im
-					
+
 					if (lastLog.msg.split("|")[4].match(log3)) {
 						var from = lastLog.msg.split("|")[4].match(log3)[2]
 						if (from.indexOf("") > -1)
@@ -147,13 +190,13 @@ function BeforeLogLineRead(e) {
 						var name = from.replace(/ /g, "").replace(/'/g, "_")
 						var actionName = lastLog.msg.split("|")[4].match(log3)[4]
 						getLog(from, '', getActionCode(actionName), actionName)
-					}else if (lastLog.msg.split("|")[4].match(log4)){
+					} else if (lastLog.msg.split("|")[4].match(log4)) {
 						var from = lastLog.msg.split("|")[4].match(log4)[2]
 						if (from.indexOf("") > -1)
 							from = from.split("")[1].split("")[0]
 						var name = from.replace(/ /g, "").replace(/'/g, "_")
 						var actionName = lastLog.msg.split("|")[4].match(log4)[4]
-						if(actionName == "속임수 공격" || actionName == "전투 기도" || actionName == "과충전" || actionName == "연환계" || actionName == "전장의 노래" || actionName == "성원" || actionName == "도원결의" || actionName == "마인의 진혼곡")
+						if (actionName == "속임수 공격" || actionName == "전투 기도" || actionName == "과충전" || actionName == "연환계" || actionName == "전장의 노래" || actionName == "성원" || actionName == "도원결의" || actionName == "마인의 진혼곡")
 							createTimeline(from, '', getActionCode(actionName), actionName)
 					}
 				}
@@ -168,8 +211,11 @@ function BeforeLogLineRead(e) {
 			break
 	}
 }
+
+
+
 function getLog(from, to, actionCode, actionName) {
-	if(actionName != "용의 시선")
+	if (actionName != "용의 시선")
 		var name = createAst(from)
 
 	switch (actionCode) {
@@ -179,6 +225,7 @@ function getLog(from, to, actionCode, actionName) {
 			AstData[name].loyalRoad = "광역"; break
 		case "332":
 			AstData[name].loyalRoad = "지속"; break
+
 		case "398":
 			AstData[name].keep = "391"; break
 		case "399":
@@ -190,7 +237,9 @@ function getLog(from, to, actionCode, actionName) {
 		case "39C":
 			AstData[name].keep = "395"; break
 		case "39D":
-			AstData[name].keep = "396"; break	
+			AstData[name].keep = "396"; break
+
+		
 		
 		case "391": case "392": case "393": case "394": case "395": case "396": case "1D14": case "1D15":
 			AstData[name].cardCount[actionCode]++;
@@ -205,7 +254,9 @@ function getLog(from, to, actionCode, actionName) {
 				$('#' + name).addClass('on')
 				changeList(name)
 			}
-			break		
+			break
+
+		
 		case "E06": case "1D18": case "E07": case "E08": case "E09": case "1D13":
 			AstData[name].cardAction[actionCode]++;
 			$('#member').find('span').removeClass('on')
@@ -224,7 +275,9 @@ function getLog(from, to, actionCode, actionName) {
 				getLog(from, '', AstData[name].keep, '')
 				AstData[name].keep = ''
 			}
-			break	
+			break
+
+		
 		
 		case "33D": case "33E": case "33F": case "340": case "341": case "342":
 		case "F0000": case "A0000": case "5AE0000":
@@ -232,6 +285,7 @@ function getLog(from, to, actionCode, actionName) {
 			break
 	}
 }
+
 function getActionCode(actionName) {
 	switch (actionName) {
 		case "왕도: 효과 향상": return "330"
@@ -247,7 +301,7 @@ function getActionCode(actionName) {
 
 		case "천궁의 반목": return "A0000"
 		case "시간 지연": return "F0000"
-		case "용의 시선": return "5AE0000"		
+		case "용의 시선": return "5AE0000"
 
 		case "아제마의 균형": return "33D"
 		case "세계수의 줄기": return "33E"
@@ -279,9 +333,13 @@ function getActionCode(actionName) {
 		case "연환계": return "1D0C"
 		case "성원": return "1D60"
 		case "도원결의": return "1CE4"
-		case "마인의 진혼곡": return "73"	
+		case "마인의 진혼곡": return "73"
 	}
 }
+
+
+
+
 function createTimeline(from, to, actionCode, actionName) {
 	var name = from.replace(/ /g, "").replace(/'/g, "_")
 	var arrow = '→'
@@ -293,7 +351,8 @@ function createTimeline(from, to, actionCode, actionName) {
 		var duration = "--:--"
 
 	switch (actionCode) {
-		case "F0000": case "A0000": case "5AE0000": 			
+		case "F0000": case "A0000": case "5AE0000": 
+			
 			if (actionCode == "A0000") {
 				to = ''
 				arrow = ''
@@ -307,10 +366,13 @@ function createTimeline(from, to, actionCode, actionName) {
 				+ '<td class="cell_1 cnt">' + arrow + '</td>'
 				+ '<td class="cell_3 to">' + to + '</td>'
 				+ '</tr></table><div class="underline"></div>';
+
 			$('#notice').remove()
 			$('.scrollArea').prepend(html);
 			break
-		case "33D": case "33E": case "33F": case "340": case "341": case "342":	
+		case "33D": case "33E": case "33F": case "340": case "341": case "342":
+			
+			console.log(AstData[name].loyalRoad)
 			if (AstData[name].loyalRoad == "강화")
 				eff = 'eff2'
 			else if (AstData[name].loyalRoad == "지속")
@@ -337,9 +399,11 @@ function createTimeline(from, to, actionCode, actionName) {
 
 			AstData[name].loyalRoad = "단일"
 			AstData[name].to = ""
-			break			
-		case "1CE4": case "73": case "76": case "8D2": case "DE5": case "B45": case "1D0C": case "1D60":	
-		
+			break
+
+
+		case "1CE4": case "73": case "76": case "8D2": case "DE5": case "B45": case "1D0C": case "1D60":
+			
 			var html = '<table><tr>'
 				+ '<td class="cell_1 cnt">' + duration + '</td>'
 				+ '<td class="cell_1"><img src="img/' + actionCode + '.png"></td>'
@@ -349,11 +413,15 @@ function createTimeline(from, to, actionCode, actionName) {
 				+ '<td class="cell_1 cnt"></td>'
 				+ '<td class="cell_3 to"></td>'
 				+ '</tr></table><div class="underline"></div>';
+
 			$('#notice').remove()
 			$('.scrollArea').prepend(html);
-			break 
-	}	
+			break
+	}
 }
+
+
+
 function createAst(from) {
 	var name = from.replace(/ /g, "").replace(/'/g, "_")
 	if (AstData[name] == null) {
@@ -367,11 +435,12 @@ function createAst(from) {
 	}
 	return name
 }
-function Person(){
+function Person() {
 	this.job = ""
 	this.name = ""
 }
-function Ast() {	
+function Ast() {
+	
 	this.cardAction = {
 		"E06": 0,
 		"1D18": 0,
@@ -379,7 +448,8 @@ function Ast() {
 		"E08": 0,
 		"E09": 0,
 		"1D13": 0
-	}	
+	}
+	
 	this.cardCount = {
 		"391": 0,
 		"392": 0,
@@ -396,11 +466,15 @@ function Ast() {
 	this.to = ""
 }
 
+
+
+
 var myName = null
 var myJob = null
 var AstData = new Object()
 var lastData = null
 var lastDataActive = false
+
 var startFlag = false
 var autoResetFlag = true
 var initFlag = false
