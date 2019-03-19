@@ -15,6 +15,7 @@
             margin: 0;
             padding: 0;
         }
+
         div {
             -ms-user-select: none;
             -moz-user-select: -moz-none;
@@ -23,6 +24,7 @@
             user-select: none;
             cursor: default;
         }
+
         html {
             width: 100%;
             height: 100%;
@@ -32,10 +34,21 @@
             color: #fff;
             overflow: hidden;
         }
+
         body {
             width: 98%;
             height: 98%;
             margin: 1%;
+        }
+        .speBox img{
+            width:1.8rem; 
+            padding:.15rem;
+            
+        }
+        .speBox{            
+            width: 100%;
+            height: 4.4rem;
+            margin-bottom: .5rem;
         }
         .lineBox {
             background: rgba(0, 0, 0, 0.5);
@@ -64,38 +77,46 @@
             overflow-y: auto;
             font-size: 1.1rem;
         }
+
         ::-webkit-scrollbar,
         scrollbar {
             width: .25rem;
             height: .25rem;
         }
+
         ::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.1);
             border-radius: .25rem;
         }
+
         img {
             width: 2.2rem;
         }
+
         td>img {
             padding: 0 .5rem;
         }
+
         .tabBox {
             width: 100%;
             height: 2.2rem;
             margin-bottom: .5rem;
         }
+
         .tabArea {
             background: rgba(0, 0, 0, 0.5);
             width: 50%;
             float: left;
             height: 2.2rem;
         }
+
         table {
             width: 95%;
             font-size: 1.1rem;
             table-layout: fixed;
             border-collapse: collapse;
         }
+
         table,
         td {
             text-align: right;
@@ -103,43 +124,54 @@
             text-overflow: ellipsis;
             overflow: hidden;
         }
+
         .line {
             color: rgba(255, 255, 255, 0.1);
         }
+
         .underline {
             width: 95%;
             height: .1rem;
             background: rgba(255, 255, 255, 0.1);
             margin-bottom: .25rem;
         }
+
         .harf {
             width: 25%;
         }
+
         .cnt {
             color: rgb(155, 155, 155)
         }
+
         .num {
             font-weight: bold;
         }
+
         .abName {
             color: coral;
         }
+
         .eff1 {
             color: orchid;
             font-weight: bold;
         }
+
         .eff2 {
             color: turquoise;
             font-weight: bold;
         }
+
         .eff3 {
             color: springgreen;
             font-weight: bold;
         }
+
         .eff4 {
             color: gold;
             font-weight: bold;
         }
+
         .cell_1,
         .cell_2,
         .cell_3,
@@ -151,34 +183,42 @@
             vertical-align: middle;
             table-layout: fixed;
         }
+
         .cell_1 {
             width: 3rem;
         }
+
         .cell_2 {
             width: 8rem;
             text-align: left;
         }
+
         .cell_3 {
             width: 100%;
             text-overflow: clip
         }
+
         .cell_4 {
             width: 5rem;
         }
+
         #member {
             right: .25rem;
             float: right;
             overflow: hidden;
         }
+
         #member>span {
             margin-left: 1rem;
         }
+
         #member>span:hover,
         #reset:hover,
         #astInfo:hover {
             cursor: pointer;
             text-shadow: 0 0 .3rem #fff;
         }
+
         .on {
             color: coral;
             font-weight: bold;
@@ -208,6 +248,81 @@
                 <font style="color:skyblue">주의 : (베타 버전) 기록이 정확하지 않을 수도 있음!</font>
             </div>
         </div>
+    </div>
+    <div class="speBox">
+                <!-- 스펠 영역 -->
+                <div class="tabArea harf">
+                        <div style="margin:0;">
+                            <img src="img/8D2.png">
+                        </div>
+                        <div id="8D2" style="right:75%">
+                            <span class="num">-</span>
+                            <span class="cnt"> 초</span>
+                        </div>
+                    </div>
+                    <div class="tabArea harf">
+                        <div style="margin:0;">
+                            <img src="img/1CE4.png">
+                        </div>
+                        <div id="1CE4" style="right:50%">
+                            <span class="num">-</span>
+                            <span class="cnt"> 초</span>
+                        </div>
+                    </div>
+                    <div class="tabArea harf">
+                        <div style="margin:0;">
+                            <img src="img/76.png">
+                        </div>
+                        <div id="76" style="right:25%">
+                            <span class="num">-</span>
+                            <span class="cnt"> 초</span>
+                        </div>
+                    </div>
+                    <div class="tabArea harf">
+                        <div style="margin:0;">
+                            <img src="img/DE5.png">
+                        </div>
+                        <div id="DE5" style="right:.25rem">
+                            <span class="num">-</span>
+                            <span class="cnt"> 초</span>
+                        </div>
+                    </div>
+                    <div class="tabArea harf" style="border-bottom-left-radius: .5rem;">
+                        <div style="margin:0;">
+                            <img src="img/1D0C.png">
+                        </div>
+                        <div id="1D0C" style="right:75%">
+                            <span class="num">-</span>
+                            <span class="cnt"> 초</span>
+                        </div>
+                    </div>
+                    <div class="tabArea harf">
+                        <div style="margin:0;">
+                            <img src="img/1D60.png">
+                        </div>
+                        <div id="1D60" style="right:50%">
+                            <span class="num">-</span>
+                            <span class="cnt"> 초</span>
+                        </div>
+                    </div>
+                    <div class="tabArea harf">
+                        <div style="margin:0;">
+                            <img src="img/1D1A.png">
+                        </div>
+                        <div id="1D1A" style="right:25%">
+                            <span class="num">-</span>
+                            <span class="cnt"> 초</span>
+                        </div>
+                    </div>
+                    <div class="tabArea harf" style="border-bottom-right-radius: .5rem;">
+                        <div style="margin:0;">
+                            <img src="img/B45.png">
+                        </div>
+                        <div id="B45" style="right:.25rem">
+                            <span class="num">-</span>
+                            <span class="cnt"> 초</span>
+                        </div>
+                    </div>
     </div>
     <div class="ast">
         <div class="lineBox">
