@@ -437,19 +437,19 @@ function spellTimer(actionCode) {
 	switch (actionCode) {
 		case "76": 
 		case "DE5": 
-			$('.speBox').find('#' + actionCode + ' .num').text(180)
+			$('.speBox').find('#' + actionCode + ' .num').text(179)
 			break
 		case "8D2": 
-			$('.speBox').find('#' + actionCode + ' .num').text(60)
+			$('.speBox').find('#' + actionCode + ' .num').text(59)
 			break
 		case "B45": 
 		case "1D0C": 
 		case "1D60": 
 		case "1D1A": 
-			$('.speBox').find('#' + actionCode + ' .num').text(120)
+			$('.speBox').find('#' + actionCode + ' .num').text(119)
 			break
 		case "1CE4": 
-			$('.speBox').find('#' + actionCode + ' .num').text(90)
+			$('.speBox').find('#' + actionCode + ' .num').text(89)
 			break
 	}
 }
