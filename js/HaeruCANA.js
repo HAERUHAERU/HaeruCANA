@@ -1,10 +1,20 @@
-$(document).ready(function(){
-	if(!localStorage.getItem("astInfoToggle")){
+$(document).ready(function () {
+	if (!localStorage.getItem("astInfoToggle")) {
 		localStorage.setItem("astInfoToggle", true)
 	}
 	astInfoCheckFlag = localStorage.getItem("astInfoToggle")
 	calHeight(astInfoCheckFlag)
 	
+		
+		setInterval(function(){
+			$('#8D2,#1CE4,#76,#DE5,#1D0C,#1D60,#1D1A,#B45').find('.num').each(function(){
+				var sec = parseInt($(this).text())
+				if(sec != 0 && !isNaN(sec))
+					$(this).text(sec - 1)
+				if(sec == 0)
+					clearInterval(actionCode)
+			})
+		}, 1000);
 });
 
 
@@ -12,15 +22,15 @@ $(window).resize(function () {
 	calHeight(astInfoCheckFlag)
 });
 
-function calHeight(flag){
-	if(flag == 'true'){		
-		$('.scrollArea').css('height', '-webkit-calc(100vh - 160px)')		
+function calHeight(flag) {
+	if (flag == 'true') {
+		$('.scrollArea').css('height', '-webkit-calc(100vh - 210px)')
 		$('.ast').show()
 		$('#astInfo').text("Hide")
-	}else{
-		$('.scrollArea').css('height', '-webkit-calc(100vh - 40px)')		
+	} else {
+		$('.scrollArea').css('height', '-webkit-calc(100vh - 90px)')
 		$('.ast').hide()
-		$('#astInfo').text("Show")	
+		$('#astInfo').text("Show")
 	}
 	localStorage.setItem("astInfoToggle", flag)
 	astInfoCheckFlag = flag
@@ -34,14 +44,15 @@ function reset(flag) {
 			startFlag = false
 			break
 		case "astInfo":
-			if( astInfoCheckFlag == 'true')
+			if (astInfoCheckFlag == 'true')
 				calHeight('false')
-			else			
+			else
 				calHeight('true')
 			break
 		case "btn":
 			AstData = new Object()
-			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
+			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)			
+			$("#8D2,#1CE4,#76,#DE5,#1D0C,#1D60,#1D1A,#B45").find('.num').text('-')
 			$('.scrollArea').html('');
 			if (!lastDataActive && !$('#notice').length)
 				$('#target').text('[--:--] 초기화 완료!')
@@ -51,7 +62,8 @@ function reset(flag) {
 			break
 		case "autoReset":
 			AstData = new Object()
-			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)
+			$("#E06,#1D18,#E07,#E08,#E09,#1D13,#391,#392,#393,#394,#395,#396,#1D14,#1D15").find('.num').text(0)		
+			$("#8D2,#1CE4,#76,#DE5,#1D0C,#1D60,#1D1A,#B45").find('.num').text('-')
 			$('.scrollArea').html('');
 			if (!lastDataActive && !$('#notice').length)
 				$('#target').text('[--:--] 초읽기·전투 시작을 인식!')
@@ -181,7 +193,7 @@ function BeforeLogLineRead(e) {
 				
 				else if (lastLog.msg.split("|")[0] == '00') {
 					var log3 = /^((.*?)(이|가) (여왕의 날개|왕의 검|위상 변화|소 아르카나|보류|점지|묘수|왕도|아제마의 균형|세계수의 줄기|오쉬온의 화살|할로네의 창|살리아크의 물병|비레고의 탑|천궁의 반목)(을|를) 시전했습니다.)$/im
-					var log4 = /^((.*?)(이|가) (속임수 공격|전투 기도|과충전|연환계|전장의 노래|성원|도원결의|마인의 진혼곡)(을|를) 시전했습니다.)$/im
+					var log4 = /^((.*?)(이|가) (속임수 공격|전투 기도|과충전|연환계|전장의 노래|성원|도원결의|마인의 진혼곡|에기의 가호)(을|를) 시전했습니다.)$/im
 
 					if (lastLog.msg.split("|")[4].match(log3)) {
 						var from = lastLog.msg.split("|")[4].match(log3)[2]
@@ -196,7 +208,7 @@ function BeforeLogLineRead(e) {
 							from = from.split("")[1].split("")[0]
 						var name = from.replace(/ /g, "").replace(/'/g, "_")
 						var actionName = lastLog.msg.split("|")[4].match(log4)[4]
-						if (actionName == "속임수 공격" || actionName == "전투 기도" || actionName == "과충전" || actionName == "연환계" || actionName == "전장의 노래" || actionName == "성원" || actionName == "도원결의" || actionName == "마인의 진혼곡")
+						if (actionName == "속임수 공격" || actionName == "전투 기도" || actionName == "과충전" || actionName == "연환계" || actionName == "전장의 노래" || actionName == "성원" || actionName == "도원결의" || actionName == "마인의 진혼곡" || actionName == "에기의 가호")
 							createTimeline(from, '', getActionCode(actionName), actionName)
 					}
 				}
@@ -334,6 +346,7 @@ function getActionCode(actionName) {
 		case "성원": return "1D60"
 		case "도원결의": return "1CE4"
 		case "마인의 진혼곡": return "73"
+		case "에기의 가호": return "1D1A"
 	}
 }
 
@@ -402,7 +415,7 @@ function createTimeline(from, to, actionCode, actionName) {
 			break
 
 
-		case "1CE4": case "73": case "76": case "8D2": case "DE5": case "B45": case "1D0C": case "1D60":
+		case "1CE4": case "73": case "76": case "8D2": case "DE5": case "B45": case "1D0C": case "1D60": case "1D1A":
 			
 			var html = '<table><tr>'
 				+ '<td class="cell_1 cnt">' + duration + '</td>'
@@ -413,9 +426,30 @@ function createTimeline(from, to, actionCode, actionName) {
 				+ '<td class="cell_1 cnt"></td>'
 				+ '<td class="cell_3 to"></td>'
 				+ '</tr></table><div class="underline"></div>';
-
 			$('#notice').remove()
 			$('.scrollArea').prepend(html);
+			spellTimer(actionCode)
+			break
+	}
+}
+
+function spellTimer(actionCode) {
+	switch (actionCode) {
+		case "76": 
+		case "DE5": 
+			$('.speBox').find('#' + actionCode + ' .num').text(180)
+			break
+		case "8D2": 
+			$('.speBox').find('#' + actionCode + ' .num').text(60)
+			break
+		case "B45": 
+		case "1D0C": 
+		case "1D60": 
+		case "1D1A": 
+			$('.speBox').find('#' + actionCode + ' .num').text(120)
+			break
+		case "1CE4": 
+			$('.speBox').find('#' + actionCode + ' .num').text(90)
 			break
 	}
 }
